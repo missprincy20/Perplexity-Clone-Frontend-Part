@@ -174,29 +174,23 @@ export default function SourceCard({
 
         {/* Open */}
 
-        <button
-
-          className="
-          rounded-xl
-
-          p-2
-
-          text-zinc-400
-
-          transition
-
-          hover:bg-white/5
-
-          hover:text-blue-400
-
-          "
-
-        >
-
-          <ExternalLink size={17}/>
-
-        </button>
-
+        {url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+            rounded-xl
+            p-2
+            text-zinc-400
+            transition
+            hover:bg-white/5
+            hover:text-blue-400
+            "
+          >
+            <ExternalLink size={17}/>
+          </a>
+        )}
 
       </div>
 

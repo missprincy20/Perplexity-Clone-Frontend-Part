@@ -56,6 +56,7 @@ const Sidebar = () => {
       className="
       h-screen
       w-[260px]
+      shrink-0
       bg-[#09090B]
       border-r
       border-white/10
@@ -64,6 +65,8 @@ const Sidebar = () => {
       px-4
       py-5
       text-gray-300
+      overflow-y-auto
+      scrollbar-thin
       "
     >
 
@@ -77,6 +80,7 @@ const Sidebar = () => {
         gap-3
         mb-8
         px-2
+        shrink-0
         "
       >
 
@@ -117,7 +121,7 @@ const Sidebar = () => {
 
       {/* Navigation */}
 
-      <nav className="space-y-2">
+      <nav className="space-y-2 shrink-0">
 
         {
           menuItems.map((item,index)=>(
@@ -140,6 +144,7 @@ const Sidebar = () => {
         my-6
         border-t
         border-white/10
+        shrink-0
         "
       />
 
@@ -155,7 +160,7 @@ const Sidebar = () => {
 
 
 
-      <div className="mt-auto">
+      <div className="mt-auto pt-6 shrink-0">
 
 
         <LabsButton/>

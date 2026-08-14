@@ -26,7 +26,6 @@ const {
   results,
   loading,
   search
-
 }=useSearch();
 
 
@@ -496,7 +495,7 @@ p-5
 
 >
 
-<SourceList sources={results} />
+<SourceList sources={results} loading={loading} />
 
 </div>
 

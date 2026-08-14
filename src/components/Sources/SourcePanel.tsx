@@ -1,38 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, PanelRight, Globe2 } from "lucide-react";
+import { X, Globe2 } from "lucide-react";
+import type { ChatSource } from "../../types/chat";
 
 import SourceList from "./SourceList";
 
-
-interface Source {
-
-  title:string;
-
-  url:string;
-
-  snippet?:string;
-
-  sourceType?:string;
-
-  date?:string;
-
-  relevance?:number;
-
-  favicon?:string;
-
-}
-
-
 interface SourcePanelProps {
-
-  sources:Source[];
-
-  open:boolean;
-
-  onClose:()=>void;
-
-  loading?:boolean;
-
+  sources: ChatSource[];
+  open: boolean;
+  onClose: () => void;
+  loading?: boolean;
 }
 
 

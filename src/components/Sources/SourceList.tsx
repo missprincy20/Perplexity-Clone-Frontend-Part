@@ -1,25 +1,11 @@
 import { motion } from "framer-motion";
 import SourceCard from "./SourceCard";
 import { SearchX } from "lucide-react";
-
-
-interface Source {
-  title: string;
-  url: string;
-  snippet?: string;
-  sourceType?: string;
-  date?: string;
-  relevance?: number;
-  favicon?: string;
-}
-
+import type { ChatSource } from "../../types/chat";
 
 interface SourceListProps {
-
-  sources: Source[];
-
+  sources: ChatSource[];
   loading?: boolean;
-
 }
 
 

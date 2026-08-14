@@ -1,28 +1,35 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import type { KeyboardEvent } from "react";
 import {
   ArrowUp,
   Paperclip,
-  Globe,
-  BrainCircuit,
   Mic,
   Plus,
 } from "lucide-react";
-import clsx from "clsx";
+import type { Provider } from "../../types/chat";
 
 interface ChatInputProps {
-  onSend: (message: string, focusMode: string) => void;
+  onSend: (message: string, focusMode: string, provider: Provider) => void;
   loading?: boolean;
+  activeFocusMode?: string;
+  onFocusModeChange?: (mode: string) => void;
 }
 
 export default function ChatInput({
   onSend,
   loading = false,
+  activeFocusMode = "academic",
+  onFocusModeChange,
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
-  const [focusMode, setFocusMode] = useState("web");
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [thinkEnabled, setThinkEnabled] = useState(false);
+  const [focusMode, setFocusMode] = useState(activeFocusMode);
+  const [provider, setProvider] = useState<Provider>("groq");
+
+  useEffect(() => {
+    if (activeFocusMode) {
+      setFocusMode(activeFocusMode);
+    }
+  }, [activeFocusMode]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -37,7 +44,7 @@ export default function ChatInput({
   function sendMessage() {
     if (!message.trim() || loading) return;
 
-    onSend(message.trim(), focusMode);
+    onSend(message.trim(), focusMode, provider);
 
     setMessage("");
 
@@ -56,11 +63,10 @@ export default function ChatInput({
   }
 
   return (
-    <div className="border-t border-white/5 bg-[#09090B]/90 backdrop-blur-xl p-5">
+    <div className="w-full">
       <div
         className="
-        max-w-5xl
-        mx-auto
+        w-full
         rounded-3xl
         border
         border-white/10
@@ -114,8 +120,21 @@ export default function ChatInput({
             </button>
             
             <select
+              value={provider}
+              onChange={(e) => setProvider(e.target.value as Provider)}
+              className="bg-zinc-800 text-sm text-zinc-300 outline-none border border-white/10 rounded-xl px-3 py-2 cursor-pointer transition hover:bg-zinc-700"
+            >
+              <option value="groq">Groq</option>
+              <option value="gemini">Gemini</option>
+            </select>
+
+            <select
               value={focusMode}
-              onChange={(e) => setFocusMode(e.target.value)}
+              onChange={(e) => {
+                const newMode = e.target.value;
+                setFocusMode(newMode);
+                onFocusModeChange?.(newMode);
+              }}
               className="bg-zinc-800 text-sm text-zinc-300 outline-none border border-white/10 rounded-xl px-3 py-2 cursor-pointer transition hover:bg-zinc-700"
             >
               <option value="academic">Academic</option>

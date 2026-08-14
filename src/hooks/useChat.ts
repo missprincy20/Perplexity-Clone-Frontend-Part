@@ -7,8 +7,10 @@ import {
 } from "../services/chatService";
 
 import type {
-  ChatRequest
+  ChatRequest,
+  Provider,
 } from "../types/chat";
+import { normalizeChatMessage, normalizeSource } from "../types/chat";
 
 export default function useChatHook() {
 
@@ -33,23 +35,23 @@ export default function useChatHook() {
 
     message: string,
 
-    provider: "gemini" | "groq" = "gemini",
+    provider: Provider = "groq",
 
     focusMode = "general"
 
   ) {
 
-    const userMessage = {
+    const userMessage = normalizeChatMessage({
 
       id: Date.now().toString(),
 
-      role: "user" as const,
+      role: "user",
 
       content: message,
 
       createdAt: new Date(),
 
-    };
+    });
 
 
 
@@ -62,6 +64,7 @@ export default function useChatHook() {
 
 
     let aiResponse = "";
+    let capturedDocs: any[] = [];
 
 
 
@@ -83,47 +86,53 @@ export default function useChatHook() {
 
       request,
 
+      {
 
+        onToken: (chunk: string) => {
 
-      (chunk) => {
+          aiResponse += chunk;
 
-        aiResponse += chunk;
+        },
 
-      },
+        onDocuments: (docs: any) => {
+          if (Array.isArray(docs)) {
+            capturedDocs = docs.map(normalizeSource);
+          }
+        },
 
+        onCompleted: () => {
 
+          addMessage(normalizeChatMessage({
 
-      () => {
+            id: (Date.now() + 1).toString(),
 
-        addMessage({
+            role: "assistant",
 
-          id: (Date.now() + 1).toString(),
+            content: aiResponse,
 
-          role: "assistant",
+            createdAt: new Date(),
 
-          content: aiResponse,
+            sources: capturedDocs,
 
-          createdAt: new Date(),
-
-        });
-
-
-
-        setStreaming(false);
-
-        setLoading(false);
-
-      },
+          }));
 
 
 
-      (error) => {
+          setStreaming(false);
 
-        console.error(error);
+          setLoading(false);
 
-        setStreaming(false);
+        },
 
-        setLoading(false);
+        onError: (error: any) => {
+
+          console.error(error);
+
+          setStreaming(false);
+
+          setLoading(false);
+
+        }
 
       }
 

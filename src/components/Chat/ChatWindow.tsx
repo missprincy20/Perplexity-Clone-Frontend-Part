@@ -62,15 +62,16 @@ export default function ChatWindow({
 
   return (
     <div
-      className="
+     className="
       flex-1
+      w-full
       overflow-y-auto
-      px-6
+      px-8
       py-8
       scrollbar-thin
       "
     >
-      <div className="mx-auto max-w-5xl space-y-8">
+      <div className="w-full space-y-8">
 
         <AnimatePresence>
 
@@ -94,8 +95,7 @@ export default function ChatWindow({
               ) : (
 
                 <AnswerCard
-                  answer={message.content}
-                  timestamp={message.createdAt}
+                  message={message}
                   isStreaming={streaming}
                 />
 

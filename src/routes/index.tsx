@@ -11,6 +11,7 @@
 
 import {
   createBrowserRouter,
+  Navigate,
 } from "react-router-dom";
 
 
@@ -85,6 +86,12 @@ export const router = createBrowserRouter([
       {
         path:"settings",
         element:<Settings/>
+      },
+
+
+      {
+        path:"writing",
+        element:<Navigate to="/chat?mode=writing" replace />
       },
 
 

@@ -14,6 +14,8 @@ export async function streamChat(
     onToken: (token: string) => void;
     onDocuments: (docs: any) => void;
     onSuggestions?: (suggestions: string) => void;
+    onStatus?: (status: any) => void;
+    onData?: (data: any) => void;
     onCompleted: () => void;
     onError: (err: any) => void;
   }
@@ -47,9 +49,12 @@ export async function streamChat(
         if (!line.trim()) continue;
         try {
           const parsed = JSON.parse(line);
+          console.log("[NEXUS FRONTEND RAW RESPONSE]", parsed);
           if (parsed.type === "token") callbacks.onToken(parsed.data);
           else if (parsed.type === "sources" || parsed.type === "documents_found") callbacks.onDocuments(parsed.data);
           else if (parsed.type === "suggestions") callbacks.onSuggestions?.(parsed.data);
+          else if (parsed.type === "status") callbacks.onStatus?.(parsed.data);
+          else if (parsed.type === "data") callbacks.onData?.(parsed.data);
           else if (parsed.type === "completed") callbacks.onCompleted();
           else if (parsed.type === "error" || parsed.type === "suggestion_error") callbacks.onError(new Error(parsed.message));
         } catch (e) {
@@ -62,9 +67,12 @@ export async function streamChat(
     if (buffer.trim()) {
       try {
         const parsed = JSON.parse(buffer);
+        console.log("[NEXUS FRONTEND RAW RESPONSE]", parsed);
         if (parsed.type === "token") callbacks.onToken(parsed.data);
         else if (parsed.type === "sources" || parsed.type === "documents_found") callbacks.onDocuments(parsed.data);
         else if (parsed.type === "suggestions") callbacks.onSuggestions?.(parsed.data);
+        else if (parsed.type === "status") callbacks.onStatus?.(parsed.data);
+        else if (parsed.type === "data") callbacks.onData?.(parsed.data);
         else if (parsed.type === "completed") callbacks.onCompleted();
         else if (parsed.type === "error" || parsed.type === "suggestion_error") callbacks.onError(new Error(parsed.message));
       } catch (e) {
